@@ -10,14 +10,125 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text("Hello Flutter")),
-        body: const MyText(),
+        home: Scaffold(
+            appBar: AppBar(title: const Text("Hello Flutter")),
+            body: Column(
+              children: const [
+                MySimpleImage(),
+                SizedBox(
+                  height: 20,
+                ),
+                // CirCleImageByContainer(),
+                // CircleImageByClipOval(),
+                // CirCleImageByAvatar(),
+                LocalImage(),
+              ],
+            )));
+  }
+}
+
+// 加载本地图片
+class LocalImage extends StatelessWidget {
+  const LocalImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ClipOval(
+          child: Image.asset(
+        "images/a.jpeg",
+        width: 100,
+        height: 100,
+        fit: BoxFit.cover,
+      )),
+    );
+  }
+}
+
+// CircleAvatar实现圆形图片
+class CirCleImageByAvatar extends StatelessWidget {
+  const CirCleImageByAvatar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const CircleAvatar(
+      // 嵌套CircleAvatar实现边框
+      radius: 65,
+      backgroundColor: Color(0xFF42A5F5),
+      child: CircleAvatar(
+        radius: 60,
+        backgroundImage: NetworkImage(
+            "https://www.itying.com/themes/itying/images/ionic4.png"),
       ),
     );
   }
 }
 
+// ClipOval实现圆形图片
+class CircleImageByClipOval extends StatelessWidget {
+  const CircleImageByClipOval({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ClipOval(
+        child: Image.network(
+          "https://www.itying.com/themes/itying/images/ionic4.png",
+          width: 150,
+          height: 150,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+
+// Container实现圆形图片
+class CirCleImageByContainer extends StatelessWidget {
+  const CirCleImageByContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 150,
+      width: 150,
+      decoration: BoxDecoration(
+          color: Colors.yellow,
+          borderRadius: BorderRadius.circular(75),
+          image: const DecorationImage(
+              image: NetworkImage(
+                  "https://www.itying.com/themes/itying/images/ionic4.png"),
+              fit: BoxFit.cover)),
+    );
+  }
+}
+
+// 简单图片
+class MySimpleImage extends StatelessWidget {
+  const MySimpleImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // alignment: Alignment.centerRight,
+      height: 200,
+      width: 200,
+      decoration: const BoxDecoration(
+        color: Colors.yellow,
+      ),
+      // child: Image.network("https://www.itying.com/images/201906/goods_img/1120_P_1560842352183.png"), // 正方形
+      child: Image.network(
+        "https://www.itying.com/themes/itying/images/ionic4.png",
+        // scale: 2,
+        // alignment: Alignment.centerLeft,
+        fit: BoxFit.cover,
+        // repeat: ImageRepeat.repeatX,
+      ),
+    );
+  }
+}
+
+// Text
 class MyText extends StatelessWidget {
   const MyText({super.key});
 
@@ -27,11 +138,9 @@ class MyText extends StatelessWidget {
       width: 200,
       height: 200,
       margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-      decoration: const BoxDecoration(
-        color: Colors.yellow
-      ),
+      decoration: const BoxDecoration(color: Colors.yellow),
       child: const Text(
-        "凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰", 
+        "凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰凤求凰",
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
@@ -43,13 +152,14 @@ class MyText extends StatelessWidget {
           letterSpacing: 6,
           decoration: TextDecoration.underline,
           decorationColor: Colors.pink,
-          decorationStyle: TextDecorationStyle.dashed,
+          decorationStyle: TextDecorationStyle.dotted,
         ),
       ),
     );
   }
 }
 
+// container 实现 button效果
 class MyButton extends StatelessWidget {
   const MyButton({super.key});
 
@@ -64,9 +174,7 @@ class MyButton extends StatelessWidget {
         height: 50,
         width: 200,
         decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(15)
-        ),
+            color: Colors.blue, borderRadius: BorderRadius.circular(15)),
         child: const Text(
           "Button",
           style: TextStyle(
@@ -79,6 +187,7 @@ class MyButton extends StatelessWidget {
   }
 }
 
+// 简单container
 class MyContainer extends StatelessWidget {
   const MyContainer({super.key});
 
@@ -115,6 +224,7 @@ class MyContainer extends StatelessWidget {
   }
 }
 
+// 你好 世界
 class HelloWorld extends StatelessWidget {
   const HelloWorld({super.key});
 
