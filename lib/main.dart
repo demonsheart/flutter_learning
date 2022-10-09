@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './res/gridData.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,40 +15,86 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(title: const Text("Flutter App")),
-        body: const GridViewFromBuilder(),
+        body: const HomePage(),
       ),
     );
   }
 }
 
-// builder SliverGridDelegateWithFixedCrossAxisCount
-class GridViewFromBuilder extends StatelessWidget {
-  const GridViewFromBuilder({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    //获取设备的宽度和高度
+    // final size = MediaQuery.of(context).size;
 
-  Widget _initGridViewData(context, index) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 40,
+          child: Stack(
+            children: const [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text("收藏"),
+              ),
+              Align(alignment: Alignment.topRight, child: Text("购买")),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: double.infinity,
+          height: 40,
+          child: Stack(
+            children: const [
+              Positioned(
+                left: 10,
+                child: Text("收藏"),
+              ),
+              Positioned(right: 10, child: Text("购买")),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class AlignmentTest extends StatelessWidget {
+  const AlignmentTest({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    //获取设备的宽度和高度
+    // final size = MediaQuery.of(context).size;
+    // （了解）算法：(Alignment.x*childWidth/2+childWidth/2, Alignment.y*childHeight/2+childHeight/2)
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
-      child: Column(
-        children: [
-          Image.network(gridData[index]["imageUrl"]),
-          const SizedBox(height: 10),
-          Text(gridData[index]["title"], style: const TextStyle(fontSize: 15))
-        ],
+      width: 300,
+      height: 300,
+      color: Colors.red,
+      child: const Align(
+        alignment: Alignment(0, 1),
+        child: Text("你好Flutter"),
       ),
     );
   }
+}
 
+class SimpleAlign extends StatelessWidget {
+  const SimpleAlign({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-        padding: const EdgeInsets.all(10),
-        itemCount: gridData.length,
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          crossAxisSpacing: 10, //水平子Widget之间间 距
-          mainAxisSpacing: 10, //垂直子Widget之间间 距
-          childAspectRatio: 0.9,
-          maxCrossAxisExtent: 120,
-        ),
-        itemBuilder: _initGridViewData);
+    //获取设备的宽度和高度
+    // final size = MediaQuery.of(context).size;
+
+    return Container(
+      width: 300,
+      height: 300,
+      color: Colors.red,
+      child: const Align(
+        alignment: Alignment.center,
+        child: Text("你好Flutter"),
+      ),
+    );
   }
 }
