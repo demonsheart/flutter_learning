@@ -1,41 +1,55 @@
 import 'package:flutter/material.dart';
-import './res/listData.dart';
+import './res/gridData.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          appBar: AppBar(title: const Text("Hello Flutter")),
-          body: const DynamicListFromBuilder(),
-        ));
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        appBar: AppBar(title: const Text("Flutter App")),
+        body: const GridViewFromBuilder(),
+      ),
+    );
   }
 }
 
-// listBuilder生成列表
-class DynamicListFromBuilder extends StatelessWidget {
-  const DynamicListFromBuilder({super.key});
+// builder SliverGridDelegateWithFixedCrossAxisCount
+class GridViewFromBuilder extends StatelessWidget {
+  const GridViewFromBuilder({Key? key}) : super(key: key);
+
+  Widget _initGridViewData(context, index) {
+    return Container(
+      decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
+      child: Column(
+        children: [
+          Image.network(gridData[index]["imageUrl"]),
+          const SizedBox(height: 10),
+          Text(gridData[index]["title"], style: const TextStyle(fontSize: 15))
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: listData.length,
-      itemBuilder:(context, i) {
-        return ListTile(
-          leading: Image.network(listData[i]["imageUrl"]),
-          title: Text(listData[i]["title"]),
-          subtitle: Text(listData[i]["author"]),
-        );
-      },
-    );
+    return GridView.builder(
+        padding: const EdgeInsets.all(10),
+        itemCount: gridData.length,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          crossAxisSpacing: 10, //水平子Widget之间间 距
+          mainAxisSpacing: 10, //垂直子Widget之间间 距
+          childAspectRatio: 0.9,
+          maxCrossAxisExtent: 120,
+        ),
+        itemBuilder: _initGridViewData);
   }
 }
