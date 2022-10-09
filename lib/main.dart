@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './myIcon.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,18 +11,34 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.yellow,
+        ),
         home: Scaffold(
             appBar: AppBar(title: const Text("Hello Flutter")),
             body: Column(
               children: const [
-                MySimpleImage(),
+                // MySimpleImage(),
                 SizedBox(
                   height: 20,
                 ),
                 // CirCleImageByContainer(),
                 // CircleImageByClipOval(),
                 // CirCleImageByAvatar(),
-                LocalImage(),
+                // LocalImage(),
+
+                // https://fonts.google.com/icons?selected=Material+Icons
+                Icon(Icons.search, color: Colors.red, size: 40),
+                SizedBox(height: 10),
+                Icon(Icons.home),
+                SizedBox(height: 10),
+                Icon(Icons.category),
+
+                // ALibaba
+                SizedBox(height: 10),
+                Icon(MyIconFont.wechat, size: 40, color: Colors.green),
+                SizedBox(height: 10),
+                Icon(MyIconFont.shop, size: 40),
               ],
             )));
   }
