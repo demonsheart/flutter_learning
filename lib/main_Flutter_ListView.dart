@@ -111,6 +111,7 @@ class _ShoppingListState extends State<ShoppingList> {
   }
 }
 
+// 官方文档示例
 void main() {
   runApp(const MaterialApp(
     title: 'Shopping App',
