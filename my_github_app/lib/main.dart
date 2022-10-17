@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
             localizationsDelegates: const [
               // 本地化的代理类
               GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GmLocalizationsDelegate()
             ],
