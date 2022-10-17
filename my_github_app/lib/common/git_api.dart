@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import '../index.dart';
+import 'token.dart';
 export 'package:dio/dio.dart' show DioError;
 
 class Git {
@@ -18,10 +18,12 @@ class Git {
   static Dio dio = Dio(BaseOptions(
     baseUrl: 'https://api.github.com/',
     headers: {
-      HttpHeaders.acceptHeader: "application/vnd.github.squirrel-girl-preview,"
-          "application/vnd.github.symmetra-preview+json",
+      HttpHeaders.acceptHeader: "application/vnd.github+json",
     },
   ));
+
+  // github 已经禁止账号密码登陆 需要用到token
+  // static String githubToken = "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";
 
   static void init() {
     // 添加缓存插件
@@ -45,7 +47,8 @@ class Git {
 
   // 登录接口，登录成功后返回用户信息
   Future<User> login(String login, String pwd) async {
-    String basic = 'Basic ${base64.encode(utf8.encode('$login:$pwd'))}';
+    // github 已经禁止账号密码登陆 需要用到token
+    String basic = 'Bearer $githubToken';
     var r = await dio.get(
       "/user",
       options: _options.copyWith(headers: {

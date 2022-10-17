@@ -9,7 +9,7 @@ class HomeRoute extends StatefulWidget {
 
 class _HomeRouteState extends State<HomeRoute> {
   static const loadingTag = "##loading##"; //表尾标记
-  var _items = <Repo>[Repo()..name = loadingTag];
+  final _items = <Repo>[Repo()..name = loadingTag];
   bool hasMore = true; //是否还有数据
   int page = 1; //当前请求的是第几页
 
