@@ -1,0 +1,4 @@
+#Tue Oct 25 15:59:12 CST 2022
+base.0=/Users/aicoin/code/github/flutter_learning/flutter_application_1/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

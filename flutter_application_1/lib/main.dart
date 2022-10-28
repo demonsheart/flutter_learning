@@ -1,93 +1,89 @@
+// Copyright 2017 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// ignore_for_file: public_member_api_docs
+
+import 'dart:async';
+import 'dart:developer' as developer;
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class Product {
-  const Product({required this.name});
-
-  final String name;
+void main() {
+  runApp(const MyApp());
 }
 
-typedef CartChangedCallback = Function(Product product, bool inCart);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-class ShoppingListItem extends StatelessWidget {
-  ShoppingListItem({
-    required this.product,
-    required this.inCart,
-    required this.onCartChanged,
-  }) : super(key: ObjectKey(product));
-
-  final Product product;
-  final bool inCart;
-  final CartChangedCallback onCartChanged;
-
-  Color _getColor(BuildContext context) {
-    // The theme depends on the BuildContext because different
-    // parts of the tree can have different themes.
-    // The BuildContext indicates where the build is
-    // taking place and therefore which theme to use.
-
-    return inCart //
-        ? Colors.black54
-        : Theme.of(context).primaryColor;
-  }
-
-  TextStyle? _getTextStyle(BuildContext context) {
-    if (!inCart) return null;
-
-    return const TextStyle(
-      color: Colors.black54,
-      decoration: TextDecoration.lineThrough,
-    );
-  }
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        onCartChanged(product, inCart);
-      },
-      leading: CircleAvatar(
-        backgroundColor: _getColor(context),
-        child: Text(product.name[0]),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      title: Text(
-        product.name,
-        style: _getTextStyle(context),
-      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class ShoppingList extends StatefulWidget {
-  const ShoppingList({required this.products, super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  final List<Product> products;
-
-  // The framework calls createState the first time
-  // a widget appears at a given location in the tree.
-  // If the parent rebuilds and uses the same type of
-  // widget (with the same key), the framework re-uses
-  // the State object instead of creating a new State object.
+  final String title;
 
   @override
-  State<ShoppingList> createState() => _ShoppingListState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _ShoppingListState extends State<ShoppingList> {
-  final _shoppingCart = <Product>{};
+class _MyHomePageState extends State<MyHomePage> {
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
-  void _handleCartChanged(Product product, bool inCart) {
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     setState(() {
-      // When a user changes what's in the cart, you need
-      // to change _shoppingCart inside a setState call to
-      // trigger a rebuild.
-      // The framework then calls build, below,
-      // which updates the visual appearance of the app.
-
-      if (!inCart) {
-        _shoppingCart.add(product);
-      } else {
-        _shoppingCart.remove(product);
-      }
+      _connectionStatus = result;
     });
   }
 
@@ -95,31 +91,10 @@ class _ShoppingListState extends State<ShoppingList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shopping List'),
+        title: const Text('Connectivity example app'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        children: widget.products.map((product) {
-          return ShoppingListItem(
-            product: product,
-            inCart: _shoppingCart.contains(product),
-            onCartChanged: _handleCartChanged,
-          );
-        }).toList(),
-      ),
+      body: Center(
+          child: Text('Connection Status: ${_connectionStatus.toString()}')),
     );
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    title: 'Shopping App',
-    home: ShoppingList(
-      products: [
-        Product(name: 'Eggs'),
-        Product(name: 'Flour'),
-        Product(name: 'Chocolate chips'),
-      ],
-    ),
-  ));
 }
